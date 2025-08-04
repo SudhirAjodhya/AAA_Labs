@@ -173,7 +173,10 @@ k = 31
 timings_storage = np.zeros((k, 5))
 timings_average = np.zeros(k)
 timing_deviations = np.zeros(k)
-spaces = []
+values_k = np.zeros(k)
+spaces_storage = np.zeros((k, 5))
+spaces_average = np.zeros(k)
+spaces_deviations = np.zeros(k)
 for i in range(k):
     print()
     print("Running on k = " + str(i)+":")
@@ -190,11 +193,53 @@ for i in range(k):
 
         print(end_time - start_time)
         timings_storage[i][j] = end_time - start_time
-        spaces.append(expanded_nodes)
+        spaces_storage[i][j] = expanded_nodes
 
     timings_average[i] = statistics.mean(timings_storage[i]) #sum(timings_storage[i])/5
     timing_deviations[i] = 2 * statistics.stdev(timings_storage[i])
-    spaces[i] /= 5
+    spaces_average[i] = statistics.mean(spaces_storage[i])
+    spaces_deviations[i] = statistics.stdev(spaces_storage[i])
+    values_k[i] = i
+
     print(f"Average elapsed time: {timings_average[i]:.6f} seconds")
-    print(f"Expanded nodes: {spaces[i]}")
-    print(timings_storage)
+    print(f"Expanded nodes: {spaces_average[i]}")
+
+
+# Time Complexity
+plt.figure(figsize=(12,8))
+plt.xlabel("Number of moves(depth of tree)")
+plt.ylabel("Run time(seconds)")
+plt.title("8-Puzzle solver(BFS) Time complexity complexity analysis")
+#plt.plot(values_k, timings_average)
+# Add error bars using standard deviation (2 * std_dev)
+plt.errorbar(
+    values_k,                   # X values (k)
+    timings_average,            # Y values (mean time)
+    yerr=timing_deviations,     # Error bar values (± 2 std)
+    fmt='-o',                   # Line with circular markers
+    ecolor='red',               # Error bar color
+    capsize=5,                  # Caps on error bars
+    label='Mean ± 2σ'
+)
+plt.show()
+
+
+# Space Complexity
+plt.figure(figsize=(12,8))
+plt.xlabel("Number of moves (depth of tree)")
+plt.ylabel("Number of nodes expanded")
+plt.title("8-Puzzle solver(BFS) Space complexity analysis")
+#plt.plot(values_k, spaces)
+plt.errorbar(
+    values_k,                   # X values (k)
+    spaces_average,            # Y values (mean storage)
+    yerr=spaces_deviations,     # Error bar values (± 2 std)
+    fmt='-o',                   # Line with circular markers
+    ecolor='red',               # Error bar color
+    capsize=5,                  # Caps on error bars
+    label='Mean ± 2σ'
+)
+plt.show()
+
+
+
