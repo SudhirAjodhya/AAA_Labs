@@ -47,7 +47,7 @@ def available_moves(row, col):
 def check_solved(current_config, goal_config):
     return current_config == goal_config
 
-def bfs(current_config, goal_config, hash_row, hash_col):
+def game_solver(current_config, goal_config, hash_row, hash_col):
     frontier = deque()
     visited = set()
 
@@ -57,9 +57,10 @@ def bfs(current_config, goal_config, hash_row, hash_col):
     while frontier:
         current = frontier.popleft()
         #visualize_board(current.board)
+        #print()
 
         if check_solved(current.board, goal_config): 
-            print(current.moves)
+            print(current.moves) 
             return current
         
         # Choose only valid moves to explore
@@ -74,9 +75,9 @@ def bfs(current_config, goal_config, hash_row, hash_col):
             if tuple(map(tuple, next_config)) not in visited:
                 visited.add(tuple(map(tuple, next_config)))
                 frontier.append(GameSnapshot(new_row, new_col, current.moves + 1, next_config))
+                
+    print("No solution found")
             
-
-
 initial_state = input()
 goal_state = input()
 
@@ -91,7 +92,7 @@ hash_position = initial_state.find("#")
 hash_pos_row = math.floor(hash_position / 3)
 hash_pos_col = hash_position % 3
 
-bfs(current_board_configuration, goal_board_configuration, hash_pos_row, hash_pos_col)
+game_solver(current_board_configuration, goal_board_configuration, hash_pos_row, hash_pos_col)
 
 
 
