@@ -16,7 +16,11 @@ def string_to_board(board):
 
 def implement_move(board, move, row ,col):
     new_row, new_col = move.value
-    switch_positions(board, row, col, row + new_row, col + new_col)
+    target_row, target_col = row + new_row, col + new_col
+
+    # Boundaries
+    if 0 <= target_row < 3 and 0 <= target_col < 3:
+        switch_positions(board, row, col, target_row, target_col)
 
 def switch_positions(board, row1, col1, row2, col2):
     board[row1][col1], board[row2][col2] = board[row2][col2], board[row1][col1]
@@ -33,12 +37,9 @@ hash_pos_col = hash_position % 3
 
 implement_move(board, Move[move_input], hash_pos_row, hash_pos_col)
 
+output = ""
 for i in range(3):
     for j in range(3):
-        print(board[i][j], end="")
+        output += board[i][j]
+print(output)
 
-
-
-
-
-    
